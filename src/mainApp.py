@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QFileDialog,
     QComboBox,
+    QSpinBox,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
@@ -36,7 +37,7 @@ class App(QWidget):
 
         # save_path_layout
         self.save_path_layout = QHBoxLayout()
-        self.save_path_label = QLineEdit("Path to save file...")
+        self.save_path_label = QLineEdit("Path to save img...")
         self.save_path_layout.addWidget(self.save_path_label)
 
         button_save_path = QPushButton("...", clicked=self.get_save_path)
@@ -44,7 +45,7 @@ class App(QWidget):
 
         layout.addLayout(self.save_path_layout)
 
-        # save_path_layout
+        # name of file
         self.file_name_layout = QHBoxLayout()
         self.file_name_label = QLabel("Set file name: ")
         self.file_name_layout.addWidget(self.file_name_label)
@@ -54,12 +55,26 @@ class App(QWidget):
 
         layout.addLayout(self.file_name_layout)
 
+        # annot format
         combo_annot = QComboBox()
         combo_annot.addItems(["Not Annotation", "Smiles Annotation", "Name Annotation"])
         combo_annot.currentTextChanged.connect(self.text_changed)
 
         layout.addWidget(combo_annot)
 
+        # num rows set
+        self.num_rows_layout = QHBoxLayout()
+        self.file_name_label = QLabel("Set rows: ")
+        self.num_rows_layout.addWidget(self.file_name_label)
+
+        self.num_row_spine = QSpinBox()
+        self.num_row_spine.setMinimum(1)
+        self.num_row_spine.setMaximum(31)
+        self.num_rows_layout.addWidget(self.num_row_spine)
+
+        layout.addLayout(self.num_rows_layout)
+
+        # create and save img
         button = QPushButton("Create Pictures!", clicked=self.getfile)
         layout.addWidget(button)
 
