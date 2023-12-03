@@ -1,0 +1,6 @@
+CC(CNC[O-])[N+]([O-])=O
+C[N+](C)(C)CCC([O-])=O #name mol
+[O-]C1=CC=[N+]([O-])C=C1 #name mol
+[O-]CCCN=[N+]=[N-]
+C[NH+](C)CC[S-] #name mol
+CP([O-])(=O)OC[NH3+] #name mol

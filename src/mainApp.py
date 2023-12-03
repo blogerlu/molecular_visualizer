@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt6.QtWidgets import (
     QApplication,
     QLabel,
@@ -14,12 +15,14 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
 
+from generate_img import processing_smi
+
 
 class App(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Molecular Visualizer")
-        self.resize(400, 200)
+        self.resize(600, 200)
 
         layout = QVBoxLayout()
         self.setLayout(layout)
@@ -55,15 +58,17 @@ class App(QWidget):
         layout.addLayout(self.file_name_layout)
 
         # annot format
-        combo_annot = QComboBox()
-        combo_annot.addItems(["Not Annotation", "Smiles Annotation", "Name Annotation"])
-        combo_annot.currentTextChanged.connect(self.combo_annot_text_changed)
+        self.combo_annot = QComboBox()
+        self.combo_annot.addItems(
+            ["Not Annotation", "Smiles Annotation", "Name Annotation"]
+        )
+        self.combo_annot.currentTextChanged.connect(self.combo_annot_text_changed)
 
-        layout.addWidget(combo_annot)
+        layout.addWidget(self.combo_annot)
 
         # num rows set
         self.num_rows_layout = QHBoxLayout()
-        self.file_name_label = QLabel("Set rows: ")
+        self.file_name_label = QLabel("Set columns: ")
         self.num_rows_layout.addWidget(self.file_name_label)
 
         self.num_row_spine = QSpinBox()
@@ -75,11 +80,17 @@ class App(QWidget):
 
         # set img size
         self.img_size_layout = QHBoxLayout()
-        self.img_size_label = QLabel("Set img size: ")
-        self.img_size_layout.addWidget(self.img_size_label)
+        self.img_size_width_label = QLabel("Img width: ")
+        self.img_size_layout.addWidget(self.img_size_width_label)
 
-        self.img_size_elabel = QLineEdit("(200, 200)")
-        self.img_size_layout.addWidget(self.img_size_elabel)
+        self.img_size_width_elabel = QLineEdit("200")
+        self.img_size_layout.addWidget(self.img_size_width_elabel)
+
+        self.img_size_height_label = QLabel("Img height: ")
+        self.img_size_layout.addWidget(self.img_size_height_label)
+
+        self.img_size_height_elabel = QLineEdit("200")
+        self.img_size_layout.addWidget(self.img_size_height_elabel)
 
         layout.addLayout(self.img_size_layout)
 
@@ -95,16 +106,33 @@ class App(QWidget):
         self.save_path_label.setText(fname[0])
 
     def get_smi_file(self):
-        fname = QFileDialog.getOpenFileName(
-            self, "Open file", "/", "Image files (*.jpg *.gif)"
-        )
+        fname = QFileDialog.getOpenFileName(self, "Open file", "/", "Image files (*)")
         self.load_path_label.setText(fname[0])
 
     def combo_annot_text_changed(self, s):
         print(s)
 
     def save_img(self):
-        pass
+        path_to_smi = self.load_path_label.text()
+        print("file", self.file_name_elabel.text())
+        path_to_save = os.path.join(
+            self.save_path_label.text(), self.file_name_elabel.text() + ".png"
+        )
+        mols_per_row = self.num_row_spine.value()
+        sub_img_size = (
+            int(self.img_size_width_elabel.text()),
+            int(self.img_size_height_elabel.text()),
+        )
+        smiles_name = self.combo_annot.currentText()
+
+        print(path_to_save)
+        processing_smi(
+            path_to_smi,
+            path_to_save,
+            smiles_name,
+            mols_per_row,
+            sub_img_size,
+        )
 
 
 if __name__ == "__main__":
