@@ -37,7 +37,8 @@ def generate(
 
 
 def processing_smi(
-    path_to_smi,
+    path_to_smi: str,
+    path_to_save: str,
     mols_per_row: Optional[int] = 3,
     sub_img_size: Optional[tuple] = (200, 200),
     add_smiles_name: Optional[bool] = False,

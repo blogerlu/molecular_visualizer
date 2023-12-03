@@ -1,7 +1,6 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QLabel,
     QWidget,
     QLineEdit,
@@ -58,7 +57,7 @@ class App(QWidget):
         # annot format
         combo_annot = QComboBox()
         combo_annot.addItems(["Not Annotation", "Smiles Annotation", "Name Annotation"])
-        combo_annot.currentTextChanged.connect(self.text_changed)
+        combo_annot.currentTextChanged.connect(self.combo_annot_text_changed)
 
         layout.addWidget(combo_annot)
 
@@ -74,8 +73,18 @@ class App(QWidget):
 
         layout.addLayout(self.num_rows_layout)
 
+        # set img size
+        self.img_size_layout = QHBoxLayout()
+        self.img_size_label = QLabel("Set img size: ")
+        self.img_size_layout.addWidget(self.img_size_label)
+
+        self.img_size_elabel = QLineEdit("(200, 200)")
+        self.img_size_layout.addWidget(self.img_size_elabel)
+
+        layout.addLayout(self.img_size_layout)
+
         # create and save img
-        button = QPushButton("Create Pictures!", clicked=self.getfile)
+        button = QPushButton("Create Pictures!", clicked=self.save_img)
         layout.addWidget(button)
 
         # l1 = QLabel()
@@ -91,14 +100,11 @@ class App(QWidget):
         )
         self.load_path_label.setText(fname[0])
 
-    def text_changed(self, s):
+    def combo_annot_text_changed(self, s):
         print(s)
 
-    def getfile(self):
-        fname = QFileDialog.getOpenFileName(
-            self, "Open file", "/", "Image files (*.jpg *.gif)"
-        )
-        print(fname)
+    def save_img(self):
+        pass
 
 
 if __name__ == "__main__":
