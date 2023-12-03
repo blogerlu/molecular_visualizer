@@ -1,0 +1,5 @@
+[flake8]
+max-line-length = 88
+inline-quotes = "
+max-local-variables = 7
+ignore = DAR, Q000, WPS305, WPS237
