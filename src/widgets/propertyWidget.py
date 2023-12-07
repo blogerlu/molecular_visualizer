@@ -39,7 +39,6 @@ class PropertyWidget(QWidget):
 
         layout.addLayout(self.button_layout)
 
-        print(os.listdir())
         file_path = r"src/imgs/default.png"
         image_array = np.array(Image.open(file_path))
 
