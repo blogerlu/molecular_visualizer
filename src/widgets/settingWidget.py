@@ -110,7 +110,6 @@ class SettingWidget(QWidget):
 
     def save_img(self):
         path_to_smi = self.load_path_label.text()
-        print("file", self.file_name_elabel.text())
         path_to_save = os.path.join(
             self.save_path_label.text(), self.file_name_elabel.text() + ".png"
         )
@@ -121,7 +120,6 @@ class SettingWidget(QWidget):
         )
         smiles_name = self.combo_annot.currentText()
 
-        print(path_to_save)
         processing_smi(
             path_to_smi,
             path_to_save,

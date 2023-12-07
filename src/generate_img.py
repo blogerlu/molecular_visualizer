@@ -2,9 +2,11 @@
 from rdkit import Chem
 from rdkit.Chem.Draw import IPythonConsole
 from rdkit.Chem import Draw
-from typing import Optional, List
+from typing import Optional, List, Union
 import PIL
 from PIL import Image
+
+from .processing import extract_smiles_from_file
 
 
 def generate(
@@ -15,10 +17,7 @@ def generate(
     add_smiles_name: Optional[str] = "Not Annotation",
 ):
     mols = [Chem.MolFromSmiles(m) for m in smiles_list]
-    print(mols)
-    print(mols_per_row)
-    print(sub_img_size)
-    print(smiles_list)
+
     # display
     if add_smiles_name == "Smiles Annotation":
         img = Draw.MolsToGridImage(
@@ -56,21 +55,23 @@ def processing_smi(
     mols_per_row: Optional[int] = 3,
     sub_img_size: Optional[tuple] = (200, 200),
 ):
-    with open(path_to_smi, "r") as smi_file:
-        smiles_name_list = smi_file.read().splitlines()
+    """
+    Processing smi files
 
-    names_list = []
-    smiles_list = []
-    for sm in smiles_name_list:
-        try:
-            smile, name = sm.split("#")
-        except ValueError:
-            smile = sm
-            name = ""
-        names_list.append(name)
-        smiles_list.append(smile)
+    Args:
+        path_to_smi:
+        path_to_save:
+        add_smiles_name:
+        mols_per_row:
+        sub_img_size:
 
-    print(names_list)
+    Returns:
+
+    """
+    smiles_list, names_list = extract_smiles_from_file(path_to_smi)
+
+    if smiles_list == []:
+        return None
 
     img = generate(
         smiles_list,
@@ -79,8 +80,10 @@ def processing_smi(
         sub_img_size=sub_img_size,
         add_smiles_name=add_smiles_name,
     )
-
-    save_img(img, path_to_save)
+    try:
+        save_img(img, path_to_save)
+    except FileNotFoundError:
+        pass
 
 
 def save_img(img: PIL.PngImagePlugin.PngImageFile, path_to_save: str):
