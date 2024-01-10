@@ -9,8 +9,6 @@ readme = "README.md"
 python = ">=3.9,<3.13"
 rdkit = "^2023.9.2"
 pyqt6 = "6.5.3"
-auto-py-to-exe = "^2.42.0"
-pyinstaller = "^6.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
